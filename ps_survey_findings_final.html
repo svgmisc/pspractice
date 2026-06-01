@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PS Offerings — Definition Alignment Survey</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #F05A28;
+  --orange-light: #FEF0EB;
+  --orange-mid: #FBCFBC;
+  --orange-border: rgba(240,90,40,0.25);
+  --black: #0D0D0D;
+  --white: #FFFFFF;
+  --bg: #F8F7F5;
+  --bg2: #F2F1EE;
+  --text: #1A1A1A;
+  --text2: #4A4A4A;
+  --text3: #7A7A7A;
+  --border: #E2E0DC;
+  --green: #1B6E3A;
+  --green-bg: #EBF5EF;
+  --green-border: #9FD4B4;
+  --red: #B91C1C;
+  --red-bg: #FEF2F2;
+  --red-border: #FCA5A5;
+  --amber: #92400E;
+  --amber-bg: #FFFBEB;
+  --amber-border: #FCD34D;
+  --blue: #1E40AF;
+  --blue-bg: #EFF6FF;
+  --blue-border: #BFDBFE;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); }
+
+/* ── LAYOUT ── */
+.deck { width: 100vw; height: 100vh; position: relative; }
+.slide { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--white); }
+.slide.active { display: flex; }
+
+/* ── HEADER ── */
+.slide-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 36px; border-bottom: 1.5px solid var(--border);
+  background: var(--white); flex-shrink: 0;
+}
+.grafana-logo {
+  display: flex; align-items: center; gap: 10px;
+}
+.grafana-logo svg { height: 28px; width: auto; }
+.slide-meta { display: flex; align-items: center; gap: 16px; }
+.slide-tag {
+  font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--orange); padding: 3px 10px;
+  border: 1px solid var(--orange-border);
+  border-radius: 4px; background: var(--orange-light);
+}
+.slide-num { font-size: 12px; color: var(--text3); font-family: 'Poppins', sans-serif; }
+
+/* ── BODY ── */
+.slide-body {
+  flex: 1; overflow-y: auto; padding: 24px 36px 20px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.slide-body::-webkit-scrollbar { width: 4px; }
+.slide-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── TITLES ── */
+.slide-title {
+  font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 600;
+  color: var(--text); line-height: 1.15;
+}
+.slide-title span { color: var(--orange); }
+.slide-subtitle { font-size: 13px; color: var(--text3); margin-top: 4px; line-height: 1.5; }
+
+/* ── SECTION HEAD ── */
+.sec-head {
+  font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3);
+  padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 8px;
+}
+
+/* ── GRID LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px;
+}
+.card-title {
+  font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 10px;
+}
+.card-title.green { color: var(--green); }
+.card-title.red { color: var(--red); }
+.card-title.orange { color: var(--orange); }
+.card-title.blue { color: var(--blue); }
+.card-title.amber { color: var(--amber); }
+
+/* ── BULLET LIST ── */
+.bl { display: flex; flex-direction: column; gap: 6px; }
+.bi { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; line-height: 1.55; color: var(--text2); }
+.bd { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+.bd.orange { background: var(--orange); }
+.bd.green { background: var(--green); }
+.bd.red { background: var(--red); }
+.bd.blue { background: var(--blue); }
+.bd.amber { background: var(--amber); }
+.bd.gray { background: var(--text3); }
+
+/* ── STAT CHIPS ── */
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-size: 12px; font-weight: 500; font-family: 'Poppins', sans-serif;
+  padding: 5px 12px; border-radius: 5px;
+  background: var(--orange-light); color: var(--orange);
+  border: 1px solid var(--orange-border);
+}
+.chip.gray { background: var(--bg2); color: var(--text3); border-color: var(--border); }
+
+/* ── BAR CHART ── */
+.bar-list { display: flex; flex-direction: column; gap: 6px; }
+.bar-item { display: flex; align-items: center; gap: 8px; }
+.bar-lbl { font-size: 12px; color: var(--text2); min-width: 190px; line-height: 1.3; }
+.bar-lbl.short { min-width: 140px; }
+.bar-track { flex: 1; height: 7px; background: var(--bg2); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; }
+.bar-pct { font-size: 11.5px; font-weight: 500; font-family: 'Poppins', sans-serif; min-width: 36px; text-align: right; }
+
+/* ── MATRIX ── */
+.matrix { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.mx-col { border-radius: 8px; overflow: hidden; border: 1px solid; }
+.mx-head { padding: 9px 12px; }
+.mx-head-lbl { font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.mx-head-sub { font-size: 10px; margin-top: 2px; opacity: 0.75; }
+.mx-body { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.mx-item { border-radius: 5px; padding: 8px 10px; border: 1px solid; }
+.mx-num { font-size: 9px; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 2px; }
+.mx-title { font-size: 12px; font-weight: 500; line-height: 1.3; }
+.mx-note { font-size: 11px; margin-top: 3px; line-height: 1.45; }
+
+/* green matrix */
+.mx-col.green { border-color: #9FD4B4; }
+.mx-col.green .mx-head { background: var(--green-bg); }
+.mx-col.green .mx-head-lbl { color: var(--green); }
+.mx-col.green .mx-head-sub { color: var(--green); }
+.mx-col.green .mx-item { background: var(--green-bg); border-color: #9FD4B4; }
+.mx-col.green .mx-num { color: var(--green); }
+.mx-col.green .mx-title { color: #0D3D1E; }
+.mx-col.green .mx-note { color: var(--green); }
+
+/* amber matrix */
+.mx-col.amber { border-color: var(--amber-border); }
+.mx-col.amber .mx-head { background: var(--amber-bg); }
+.mx-col.amber .mx-head-lbl { color: var(--amber); }
+.mx-col.amber .mx-head-sub { color: var(--amber); }
+.mx-col.amber .mx-item { background: var(--amber-bg); border-color: var(--amber-border); }
+.mx-col.amber .mx-num { color: var(--amber); }
+.mx-col.amber .mx-title { color: #451A03; }
+.mx-col.amber .mx-note { color: var(--amber); }
+
+/* red matrix */
+.mx-col.red { border-color: var(--red-border); }
+.mx-col.red .mx-head { background: var(--red-bg); }
+.mx-col.red .mx-head-lbl { color: var(--red); }
+.mx-col.red .mx-head-sub { color: var(--red); }
+.mx-col.red .mx-item { background: var(--red-bg); border-color: var(--red-border); }
+.mx-col.red .mx-num { color: var(--red); }
+.mx-col.red .mx-title { color: #450A0A; }
+.mx-col.red .mx-note { color: var(--red); }
+
+/* ── DEFINITIONS TABLE ── */
+.def-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.def-table thead th {
+  font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3);
+  padding: 0 10px 7px; text-align: left; border-bottom: 1.5px solid var(--border);
+}
+.def-table thead th:nth-child(1) { width: 100px; }
+.def-table thead th:nth-child(3) { width: 70px; }
+.def-table tbody td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+.def-table tbody tr:last-child td { border-bottom: none; }
+.def-table tbody tr:hover td { background: var(--bg); }
+.term-lbl { font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; color: var(--text); }
+.align-badge { display: inline-block; font-size: 10px; font-weight: 600; font-family: 'Poppins', sans-serif; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+.ab-high { background: var(--green-bg); color: var(--green); }
+.ab-mid { background: var(--amber-bg); color: var(--amber); }
+.ab-low { background: var(--red-bg); color: var(--red); }
+.def-text { color: var(--text); }
+.why-text { font-size: 11.5px; color: var(--text3); line-height: 1.5; }
+
+/* ── RECOMMENDATION BLOCK ── */
+.rec { border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; background: var(--orange-light); padding: 9px 12px; font-size: 12.5px; line-height: 1.55; color: var(--text2); margin-bottom: 6px; }
+
+/* ── ACTION CARD ── */
+.action-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+.action-type { font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+.action-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── NAV ── */
+.nav { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 36px; border-top: 1px solid var(--border); background: var(--white); flex-shrink: 0; }
+.nav-btn { background: var(--white); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 7px 20px; font-size: 12px; font-weight: 500; font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.15s; }
+.nav-btn:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+.nav-btn:disabled { opacity: 0.35; cursor: default; }
+.nav-dots { display: flex; gap: 5px; align-items: center; padding: 0 12px; }
+.nav-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all 0.2s; }
+.nav-dot.active { background: var(--orange); width: 20px; border-radius: 4px; }
+
+/* ── MISC ── */
+.highlight { color: var(--orange); font-weight: 500; }
+.divider { height: 1px; background: var(--border); }
+.pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 12px; }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- ══════════════ SLIDE 1 · EXECUTIVE SUMMARY ══════════════ -->
+<div class="slide active" id="s1">
+  <div class="slide-header">
+    <div class="grafana-logo">
+      <span style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--text);">Grafana Labs</span>
+    </div>
+    <div class="slide-meta">
+      <span class="slide-tag">Executive Summary</span>
+      <span class="slide-num">01 / 06</span>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div>
+      <div class="slide-title">PS Offerings Definition Alignment Survey —<br><span>April-May 2026</span></div>
+      <div class="slide-subtitle">Internal baseline survey to identify operational alignment gaps across scoping, selling, and delivery.</div>
+    </div>
+    <div class="chip-row">
+      <div class="chip">15 respondents</div>
+      <div class="chip">~30% of PS team</div>
+      <div class="chip">50%+ SAs · rest EMs &amp; Ops</div>
+      <div class="chip">9 terms assessed</div>
+      <div class="chip gray">Avg. offering confidence: 3 / 5</div>
+      <div class="chip gray">SOW agreement: avg 3.1 / 5</div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title green">Areas working well</div>
+        <div class="bl">
+          <div class="bi"><div class="bd green"></div>73% are aware of PS offerings at a high level — a solid baseline to build from</div>
+          <div class="bi"><div class="bd green"></div>Strong consensus on <strong>Implementation</strong> (80%) and <strong>Advisory</strong> (80%) — good anchors for the rest of the glossary</div>
+          <div class="bi"><div class="bd green"></div>80% gave offering confidence a 3/5 — higher than expected; a baseline to beat in FY28</div>
+          <div class="bi"><div class="bd green"></div>Team clearly and consistently articulates what makes engagements succeed: clear scope, customer readiness, deep discovery with technical stakeholders</div>
+          <div class="bi"><div class="bd green"></div>100% agree on core "hands-on keyboard" meaning: directly configuring, building, or modifying systems — a strong shared floor, but need to explicitly highlight that this excludes customer code</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title red">Areas to improve</div>
+        <div class="bl">
+          <div class="bi"><div class="bd red"></div><strong>Onboarding</strong> has three competing definitions at near-equal frequency — recommend retiring the term in PS context entirely</div>
+          <div class="bi"><div class="bd red"></div><strong>Migration</strong> used at least 4 ways in practice; scope failures cluster here — requires sub-type qualification in every SOW</div>
+          <div class="bi"><div class="bd red"></div><strong>RSA/TSM</strong> is the highest-ambiguity offering term — a legacy naming problem as much as a definition problem</div>
+          <div class="bi"><div class="bd red"></div>Fast Starts flagged as confusing by 60%+ — most frequently mis-sold offering; SAs forced to "fit" activities that don't match customer architecture</div>
+          <div class="bi"><div class="bd red"></div>71% of definition breakdown happens before PS touches the engagement (Sales + handoff) — fix the source, not the symptoms; leadership alignment is imperative</div>
+          <div class="bi"><div class="bd red"></div>SOW statement about being a legal doc has low agreement — education or realignment required</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn" onclick="goTo(0)" disabled>← Prev</button>
+    <div class="nav-dots">
+      <div class="nav-dot active" onclick="goTo(0)"></div><div class="nav-dot" onclick="goTo(1)"></div><div class="nav-dot" onclick="goTo(2)"></div><div class="nav-dot" onclick="goTo(3)"></div><div class="nav-dot" onclick="goTo(4)"></div><div class="nav-dot" onclick="goTo(5)"></div>
+    </div>
+    <button class="nav-btn" onclick="goTo(1)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 2 · CURRENT OFFERINGS ══════════════ -->
+<div class="slide" id="s2">
+  <div class="slide-header">
+    <div class="grafana-logo">
+      <span style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--text);">Grafana Labs</span>
+    </div>
+    <div class="slide-meta"><span class="slide-tag">Current Offerings</span><span class="slide-num">02 / 06</span></div>
+  </div>
+  <div class="slide-body">
+    <div>
+      <div class="slide-title">What's creating friction —<br>and <span>what's working</span></div>
+    </div>
+
+    <div class="two-col">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card">
+          <div class="card-title orange">Awareness &amp; confidence</div>
+          <div class="bl">
+            <div class="bi"><div class="bd orange"></div>73% aware of PS offerings — 2 said no, 2 were partially familiar. Opportunity to reset baseline in a future session.</div>
+            <div class="bi"><div class="bd orange"></div>80% gave confidence a 3/5, 20% gave 4/5. Higher than expected — retest in FY28 as a progress marker.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title red">Most confusion-causing offerings</div>
+          <div class="bar-list">
+            <div class="bar-item"><div class="bar-lbl">Packages (Fast Start, Starter)</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:#B91C1C;"></div></div><div class="bar-pct" style="color:#B91C1C;">60%</div></div>
+            <div class="bar-item"><div class="bar-lbl">Custom SOWs / migrations</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:#B91C1C;"></div></div><div class="bar-pct" style="color:#B91C1C;">60%</div></div>
+            <div class="bar-item"><div class="bar-lbl">RSA / TSM</div><div class="bar-track"><div class="bar-fill" style="width:27%;background:#F05A28;"></div></div><div class="bar-pct" style="color:#F05A28;">27%</div></div>
+            <div class="bar-item"><div class="bar-lbl">Change orders / overages</div><div class="bar-track"><div class="bar-fill" style="width:7%;background:#7A7A7A;"></div></div><div class="bar-pct" style="color:#7A7A7A;">7%</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:7px;line-height:1.5;">EMs confused most by SOWs and RSA/TSM. SAs confused most by Packages — forced to "fit" activities that don't match customer architecture.</div>
+        </div>
+        <div class="card">
+          <div class="card-title red">Why hard-to-deliver offerings failed</div>
+          <div class="bar-list">
+            <div class="bar-item"><div class="bar-lbl">Wrong / unclear expectations</div><div class="bar-track"><div class="bar-fill" style="width:67%;background:#B91C1C;"></div></div><div class="bar-pct" style="color:#B91C1C;">67%</div></div>
+            <div class="bar-item"><div class="bar-lbl">Unclear scope</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:#B91C1C;"></div></div><div class="bar-pct" style="color:#B91C1C;">60%</div></div>
+            <div class="bar-item"><div class="bar-lbl">Mismatch in hours allocated</div><div class="bar-track"><div class="bar-fill" style="width:33%;background:#F05A28;"></div></div><div class="bar-pct" style="color:#F05A28;">33%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title green">Why successful offerings worked</div>
+          <div class="bar-list">
+            <div class="bar-item"><div class="bar-lbl">Clear scope and low misalignment</div><div class="bar-track"><div class="bar-fill" style="width:53%;background:#1B6E3A;"></div></div><div class="bar-pct" style="color:#1B6E3A;">53%</div></div>
+            <div class="bar-item"><div class="bar-lbl">Less customer friction</div><div class="bar-track"><div class="bar-fill" style="width:33%;background:#1B6E3A;"></div></div><div class="bar-pct" style="color:#1B6E3A;">33%</div></div>
+            <div class="bar-item"><div class="bar-lbl">Repeatable</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#4CAF50;"></div></div><div class="bar-pct" style="color:#1B6E3A;">20%</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:7px;line-height:1.5;">The customer's genuine investment is the common thread. PS presales can screen for signals — readiness, urgency, technical stakeholder depth — but can't manufacture it.</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card">
+          <div class="card-title orange">Ownership matrix — hard-to-deliver</div>
+          <div class="matrix">
+            <div class="mx-col green">
+              <div class="mx-head"><div class="mx-head-lbl">PS presales owns</div><div class="mx-head-sub">Should be a gate</div></div>
+              <div class="mx-body">
+                <div class="mx-item"><div class="mx-title">Wrong product sold — critical plugin missing</div></div>
+                <div class="mx-item"><div class="mx-title">POC scope reductions not reflected in SOW</div></div>
+              </div>
+            </div>
+            <div class="mx-col amber">
+              <div class="mx-head"><div class="mx-head-lbl">Shared influence</div><div class="mx-head-sub">PS can flag, not fix</div></div>
+              <div class="mx-body">
+                <div class="mx-item"><div class="mx-title">Poor handover docs from AE/SE</div></div>
+                <div class="mx-item"><div class="mx-title">Hours sold to unready customers</div></div>
+              </div>
+            </div>
+            <div class="mx-col red">
+              <div class="mx-head"><div class="mx-head-lbl">Outside PS control</div><div class="mx-head-sub">Sales / commercial</div></div>
+              <div class="mx-body">
+                <div class="mx-item"><div class="mx-title">NDA disagreement blocking engagement</div></div>
+                <div class="mx-item"><div class="mx-title">Hours sold below min. threshold</div></div>
+                <div class="mx-item"><div class="mx-title">Sales pushing insurance hours SOWs</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title green">Ownership matrix — works well</div>
+          <div class="matrix">
+            <div class="mx-col green">
+              <div class="mx-head"><div class="mx-head-lbl">PS can replicate</div><div class="mx-head-sub">Enforceable criteria</div></div>
+              <div class="mx-body">
+                <div class="mx-item"><div class="mx-title">In-depth discovery with technical stakeholders</div></div>
+                <div class="mx-item"><div class="mx-title">Advisory: cloud-only, single product, bounded scope</div></div>
+              </div>
+            </div>
+            <div class="mx-col amber">
+              <div class="mx-head"><div class="mx-head-lbl">Shared — screen, not guarantee</div><div class="mx-head-sub">Customer-dependent</div></div>
+              <div class="mx-body">
+                <div class="mx-item"><div class="mx-title">Customer ready &amp; motivated for TSM</div></div>
+                <div class="mx-item"><div class="mx-title">Migration with hard customer deadline</div></div>
+              </div>
+            </div>
+            <div class="mx-col red">
+              <div class="mx-head"><div class="mx-head-lbl">Outside PS control</div><div class="mx-head-sub">Observable, not manufacturable</div></div>
+              <div class="mx-body">
+                <div class="mx-item"><div class="mx-title">Intrinsic customer motivation and org buy-in</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head">Recommendations</div>
+      <div class="two-col">
+        <div class="rec">More rigorous package and scoping recommendation engine — sell the right PS product for the right Grafana product and customer profile.</div>
+        <div class="rec">Stronger knowledge transfer: Sales → PS pre-sales → post-sales EM/SA. Flag unresponsive customers in Salesforce; loop in AE/SE after 3 unsuccessful attempts.</div>
+      </div>
+      <div class="rec" style="margin-top:6px;">Add risk-averse language to Package and RSA datasheets and SOW sections. Come up with a game plan for risk management for the post-sales team.</div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn" onclick="goTo(0)">← Prev</button>
+    <div class="nav-dots"><div class="nav-dot" onclick="goTo(0)"></div><div class="nav-dot active" onclick="goTo(1)"></div><div class="nav-dot" onclick="goTo(2)"></div><div class="nav-dot" onclick="goTo(3)"></div><div class="nav-dot" onclick="goTo(4)"></div><div class="nav-dot" onclick="goTo(5)"></div></div>
+    <button class="nav-btn" onclick="goTo(2)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 3 · DEFINITIONS ══════════════ -->
+<div class="slide" id="s3">
+  <div class="slide-header">
+    <div class="grafana-logo">
+      <span style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--text);">Grafana Labs</span>
+    </div>
+    <div class="slide-meta"><span class="slide-tag">Definition Questions</span><span class="slide-num">03 / 06</span></div>
+  </div>
+  <div class="slide-body">
+    <div>
+      <div class="slide-title">Recommended definitions —<br><span>where we align, where we don't</span></div>
+    </div>
+
+    <table class="def-table">
+      <thead><tr><th>Term</th><th>Recommended definition</th><th>Alignment</th><th>Why this / where confusion lives</th></tr></thead>
+      <tbody>
+        <tr><td><span class="term-lbl">OFFERING</span></td><td class="def-text">Another way to say "services" without saying "PS service". Identifies a service category encompassing multiple delivery approaches. Not directly sellable by itself.</td><td><span class="align-badge ab-low">47%</span></td><td class="why-text">Industry standard (Salesforce, ServiceNow) treats "offering" as a portfolio category, not a transaction. Keeping it non-sellable protects the hierarchy: Offering → Package / SOW / RSA.</td></tr>
+        <tr><td><span class="term-lbl">PACKAGE</span></td><td class="def-text">A pre-configured, fixed-scope PS service sold as a SKU. Purchased without a SOW — only the datasheet needs to be shared. Delivered end-to-end with predictable timeline and deliverables.</td><td><span class="align-badge ab-mid">67%</span></td><td class="why-text">27% "flexible bundle" camp is the risk. The fix isn't changing the definition — it's tightening ICP and pre-requisite checks. "Fixed-scope" is the non-negotiable anchor.</td></tr>
+        <tr><td><span class="term-lbl">RSA (prev. TSM)</span></td><td class="def-text">A limited-term, embedded PS role combining strategic guidance and hands-on delivery. Focused on observability architecture, platform standards, and long-term adoption. Has its own SKU and datasheet. Does not include an EM by default.</td><td><span class="align-badge ab-low">40%</span></td><td class="why-text">Highest ambiguity of any offering term. Revisit what changed when TSM → RSA. "Ongoing advisory only" undersells it; "staff augmentation" undersells the strategic component.</td></tr>
+        <tr><td><span class="term-lbl">IMPLEMENTATION</span></td><td class="def-text">A PS-led engagement to design, configure, and build an agreed NEW BUILD Grafana solution. Includes architecture, hands-on deployment, knowledge transfer, and handoff to the customer team.</td><td><span class="align-badge ab-high">80%</span></td><td class="why-text">Strongest consensus. Minor clean-up: remove the implicit "new to Grafana" framing (13% held). Implementation applies to any new build, not just first-time customers.</td></tr>
+        <tr><td><span class="term-lbl">MIGRATION</span></td><td class="def-text">A PS-led engagement to move a customer's existing monitoring or competitor observability stack to Grafana. Covers moves from competitors, OSS, and in-house solutions. Always qualify the sub-type in the SOW (e.g. "Competitor Migration — Datadog to Grafana Cloud").</td><td><span class="align-badge ab-low">53% + 40% "all of above"</span></td><td class="why-text">The definition is fine — the fix is operational. Requiring a migration sub-type qualifier in every SOW is a one-line template change that eliminates most ambiguity.</td></tr>
+        <tr><td><span class="term-lbl">ADVISORY</span></td><td class="def-text">An expert consulting engagement providing strategic and technical guidance without hands-on delivery. Includes architecture reviews, best-practice recommendations, design workshops, and roadmap planning. Customer retains implementation responsibility. Advisory ≠ hands-on hours.</td><td><span class="align-badge ab-high">80%</span></td><td class="why-text">Strong consensus. Key phrase to reinforce: "customer retains implementation responsibility." RSA may include hands-on work — Advisory does not.</td></tr>
+        <tr><td><span class="term-lbl">DEPLOYMENT</span></td><td class="def-text">Installing, configuring, and enabling a Grafana environment to go live in a target infrastructure. A technical phase or activity within an Implementation or Migration — not a standalone offering. Can refer to any environment promotion, not just production go-live.</td><td><span class="align-badge ab-mid">53%</span></td><td class="why-text">33% included "adoption and training" — conflating Deployment with Onboarding. Deployment is a technical event (go-live), not an enablement activity.</td></tr>
+        <tr><td><span class="term-lbl">ONBOARDING</span></td><td class="def-text">⚠ Recommend we do NOT use "Onboarding" as a standard PS term. 13% said it only applies to new hires (a Grafana company term), and the remaining split three ways. We already have terms for all the activities it could describe.</td><td><span class="align-badge ab-low">47% — 3-way split</span></td><td class="why-text">Highest ambiguity of any non-offering term. Three models at near-equal frequency. Retiring the term avoids confusion with Sales and OAs who need to be clear on PS scope.</td></tr>
+        <tr><td><span class="term-lbl">OUTCOME</span></td><td class="def-text">A measurable business or technical result achieved by the customer as a direct result of the PS engagement. Distinct from deliverables (what PS produces) and milestones (when things happen).</td><td><span class="align-badge ab-high">73%</span></td><td class="why-text">Good consensus. 20% use Outcome and Milestone interchangeably — the distinction matters for SOW success criteria: deliverables are completed, milestones are reached, outcomes are measured.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="two-col">
+      <div>
+        <div class="sec-head">SOW agreement (1–5 scale, avg 3.1)</div>
+        <div class="bar-list" style="margin-bottom:8px;">
+          <div class="bar-item"><div class="bar-lbl short">Score 5 — strongly agree</div><div class="bar-track"><div class="bar-fill" style="width:7%;background:#1B6E3A;"></div></div><div class="bar-pct" style="color:#1B6E3A;">7%</div></div>
+          <div class="bar-item"><div class="bar-lbl short">Score 4</div><div class="bar-track"><div class="bar-fill" style="width:27%;background:#4CAF50;"></div></div><div class="bar-pct" style="color:#1B6E3A;">27%</div></div>
+          <div class="bar-item"><div class="bar-lbl short">Score 3</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#F05A28;"></div></div><div class="bar-pct" style="color:#F05A28;">20%</div></div>
+          <div class="bar-item"><div class="bar-lbl short">Score 2</div><div class="bar-track"><div class="bar-fill" style="width:27%;background:#B91C1C;"></div></div><div class="bar-pct" style="color:#B91C1C;">27%</div></div>
+        </div>
+        <div class="rec">Present a baseline shared SOW definition and how Procurement teams view SOWs. Clarify Grafana's approach: MSA-governed, broad vs. deep based on customer redlines, signature practices, Salesforce upload requirements.</div>
+      </div>
+      <div>
+        <div class="sec-head">Where definitions break down most</div>
+        <div class="bar-list" style="margin-bottom:8px;">
+          <div class="bar-item"><div class="bar-lbl short">Sales</div><div class="bar-track"><div class="bar-fill" style="width:53%;background:#F05A28;"></div></div><div class="bar-pct" style="color:#F05A28;">53%</div></div>
+          <div class="bar-item"><div class="bar-lbl short">Handoff Sales → PS</div><div class="bar-track"><div class="bar-fill" style="width:47%;background:#F05A28;"></div></div><div class="bar-pct" style="color:#F05A28;">47%</div></div>
+          <div class="bar-item"><div class="bar-lbl short">Delivery / Engagements</div><div class="bar-track"><div class="bar-fill" style="width:27%;background:#92400E;"></div></div><div class="bar-pct" style="color:#92400E;">27%</div></div>
+          <div class="bar-item"><div class="bar-lbl short">Pre-sales / Scoping (PS)</div><div class="bar-track"><div class="bar-fill" style="width:13%;background:#7A7A7A;"></div></div><div class="bar-pct" style="color:#7A7A7A;">13%</div></div>
+        </div>
+        <div class="rec">Fix the source, not the symptoms. A shared PS glossary mandated in Sales scoping, with a structured handoff artifact gating PS kickoff, addresses 71% of breakdown in one move. Get SA Leadership alignment on "hands-on keyboard" stance and communicate explicitly across GTM with examples.</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn" onclick="goTo(1)">← Prev</button>
+    <div class="nav-dots"><div class="nav-dot" onclick="goTo(0)"></div><div class="nav-dot" onclick="goTo(1)"></div><div class="nav-dot active" onclick="goTo(2)"></div><div class="nav-dot" onclick="goTo(3)"></div><div class="nav-dot" onclick="goTo(4)"></div><div class="nav-dot" onclick="goTo(5)"></div></div>
+    <button class="nav-btn" onclick="goTo(3)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 4 · FUTURE OFFERINGS ══════════════ -->
+<div class="slide" id="s4">
+  <div class="slide-header">
+    <div class="grafana-logo">
+      <span style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--text);">Grafana Labs</span>
+    </div>
+    <div class="slide-meta"><span class="slide-tag">Future Offerings</span><span class="slide-num">04 / 06</span></div>
+  </div>
+  <div class="slide-body">
+    <div>
+      <div class="slide-title">How to build, standardize,<br>and <span>evolve offerings</span></div>
+    </div>
+    <div class="three-col">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="sec-head">Lens for building offerings</div>
+        <div class="bar-list">
+          <div class="bar-item"><div class="bar-lbl short">Customer POV — value</div><div class="bar-track"><div class="bar-fill" style="width:71%;background:#1B6E3A;"></div></div><div class="bar-pct" style="color:#1B6E3A;">71%</div></div>
+          <div class="bar-item"><div class="bar-lbl short">Sales POV — what we sell</div><div class="bar-track"><div class="bar-fill" style="width:50%;background:#F05A28;"></div></div><div class="bar-pct" style="color:#F05A28;">50%</div></div>
+          <div class="bar-item"><div class="bar-lbl short">PS POV — how we deliver</div><div class="bar-track"><div class="bar-fill" style="width:43%;background:#1E40AF;"></div></div><div class="bar-pct" style="color:#1E40AF;">43%</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title orange">Recommendation</div>
+          <div style="font-size:12.5px;color:var(--text2);line-height:1.6;">Build from <strong>PS delivery reality first</strong>, then translate into customer value language for the sale. PS delivery constraints are fixed. Customer value is how we describe it. Sales language is the wrapper.<br><br><em>Test: if an EM/SA can't explain what they'll do in the first month, the offering isn't ready to sell.</em></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="sec-head">ONE thing every offering must have</div>
+        <div class="bl">
+          <div class="bi"><div class="bd orange"></div><strong>Clarity in scoping:</strong> what's sold, why, to whom, and the value it provides — strong scoping and clear expectations</div>
+          <div class="bi"><div class="bd orange"></div><strong>Customer outcomes:</strong> specific, billable outcome with a clear value proposition aligned to customer needs</div>
+          <div class="bi"><div class="bd orange"></div><strong>Operational support:</strong> consistent resources, processes for CX alignment, technical requirements gathering, and engagement management</div>
+          <div class="bi"><div class="bd orange"></div><strong>Adaptation:</strong> continuously evolve with iteration; plan to mitigate risks for different customer segments and product roadmap changes</div>
+        </div>
+        <div class="card" style="margin-top:4px;">
+          <div class="card-title green">Quick wins</div>
+          <div class="bl">
+            <div class="bi"><div class="bd green"></div>Rigorous yet nimbler scoping: deeper discovery, clear scope of work</div>
+            <div class="bi"><div class="bd green"></div>Improved pre-sales materials: decision trees, real value definitions (no fluff), clear route to activation</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="sec-head">Standardize ONE thing immediately</div>
+        <div class="bl">
+          <div class="bi"><div class="bd gray"></div>Modular product catalog with clear definitions — enable sales to build PS products and generate SOWs procedurally</div>
+          <div class="bi"><div class="bd gray"></div>Sales alignment and scoping: how Sales positions PS, customer requirements during pre-sales, tool-based migration scoping</div>
+          <div class="bi"><div class="bd gray"></div>Consistent discovery artifacts from every pre-sales engagement</div>
+          <div class="bi"><div class="bd gray"></div>Systematic, searchable retrospectives for continuous scoping improvement</div>
+          <div class="bi"><div class="bd gray"></div>Financial clarity: consistent billing approach across PS</div>
+        </div>
+        <div class="card" style="margin-top:4px;">
+          <div class="card-title blue">Longer-term</div>
+          <div class="bl">
+            <div class="bi"><div class="bd blue"></div>Stronger EM and quicker path to production; unambiguous billable time scenarios; post-sales change management and risk management plans</div>
+            <div class="bi"><div class="bd blue"></div>Define customer segments from a PS perspective — run maturity assessments to inform change and risk management plans, consistently from pre-sales through post-sales</div>
+            <div class="bi"><div class="bd blue"></div>AI-enabled and/or automated pre-sales workflow steps; comprehensive PS Content Library</div>
+            <div class="bi"><div class="bd blue"></div>Detailed retrospectives for pre-sales deals and closed post-sales engagements</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn" onclick="goTo(2)">← Prev</button>
+    <div class="nav-dots"><div class="nav-dot" onclick="goTo(0)"></div><div class="nav-dot" onclick="goTo(1)"></div><div class="nav-dot" onclick="goTo(2)"></div><div class="nav-dot active" onclick="goTo(3)"></div><div class="nav-dot" onclick="goTo(4)"></div><div class="nav-dot" onclick="goTo(5)"></div></div>
+    <button class="nav-btn" onclick="goTo(4)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 5 · ACTIONS ══════════════ -->
+<div class="slide" id="s5">
+  <div class="slide-header">
+    <div class="grafana-logo">
+      <span style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--text);">Grafana Labs</span>
+    </div>
+    <div class="slide-meta"><span class="slide-tag">Actions</span><span class="slide-num">05 / 06</span></div>
+  </div>
+  <div class="slide-body">
+    <div>
+      <div class="slide-title">What <span>happens next</span></div>
+    </div>
+    <div class="two-col">
+      <div class="action-card">
+        <div class="action-type" style="color:var(--orange);"><div class="action-dot" style="background:var(--orange);"></div>PS Leadership &amp; Operations</div>
+
+        <div class="sec-head">Communications &amp; awareness</div>
+        <div class="bl" style="margin-bottom:12px;">
+          <div class="bi"><div class="bd orange"></div>Push updates on new offerings to <strong>#secret-cx-proserv</strong> regularly — also surfaces expansion opportunities EMs can pitch to existing customers</div>
+          <div class="bi"><div class="bd orange"></div>Monthly PS Practice update: what's changed on the practice side, and how it impacts PS SAs and EMs</div>
+        </div>
+
+        <div class="sec-head">Definitions &amp; glossary</div>
+        <div class="bl" style="margin-bottom:12px;">
+          <div class="bi"><div class="bd orange"></div>Ship v1 shared PS glossary; mandate use in Sales scoping with a structured handoff artifact that gates PS kickoff</div>
+          <div class="bi"><div class="bd orange"></div>Present a baseline shared SOW definition — including how Procurement teams view SOWs and Grafana's actual approach (MSA-governed, signature practices, Salesforce upload)</div>
+          <div class="bi"><div class="bd orange"></div>Get SA Leadership alignment on the "hands-on keyboard" stance and communicate explicitly across GTM with examples</div>
+          <div class="bi"><div class="bd orange"></div>Formally retire "Onboarding" as a PS customer-facing term; replace with specific activities (Deployment, Setup, Enablement, etc.)</div>
+          <div class="bi"><div class="bd orange"></div>Document TSM → RSA transition: what changed, what distinguishes RSA from pure advisory</div>
+        </div>
+
+        <div class="sec-head">Pre-sales process</div>
+        <div class="bl" style="margin-bottom:12px;">
+          <div class="bi"><div class="bd orange"></div>Standardize PS offering catalog: consistent value propositions, ICPs, and expectations per offering (v1 quick win)</div>
+          <div class="bi"><div class="bd orange"></div>Define required handover artifacts (configs, data source lists, env complexity)</div>
+          <div class="bi"><div class="bd orange"></div>Add formal escalation path for low-activation-intent customers — verbal flags are not enough</div>
+          <div class="bi"><div class="bd orange"></div>Build recommendation engine for sales — right PS offering for right Grafana product and customer profile</div>
+          <div class="bi"><div class="bd orange"></div>Add risk-averse language to Package and RSA datasheets and SOW sections</div>
+          <div class="bi"><div class="bd orange"></div>Flag unresponsive customers in Salesforce; loop in AE/SE after 3 unsuccessful attempts</div>
+        </div>
+
+        <div class="sec-head">Longer-term investments</div>
+        <div class="bl">
+          <div class="bi"><div class="bd blue"></div>v1 PS Content Library for pre-sales materials; longer-term: comprehensive library</div>
+          <div class="bi"><div class="bd blue"></div>AI-enabled and/or automated pre-sales workflow steps</div>
+          <div class="bi"><div class="bd blue"></div>Systematic, indexed, and searchable retrospectives by deal type, offering, and outcome</div>
+          <div class="bi"><div class="bd blue"></div>Define customer segments from a PS perspective; run maturity assessments to inform risk and change management</div>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-type" style="color:var(--blue);"><div class="action-dot" style="background:var(--blue);"></div>PS Team</div>
+
+        <div class="sec-head">Stay current on offerings</div>
+        <div class="bl" style="margin-bottom:12px;">
+          <div class="bi"><div class="bd blue"></div>Feel free to join GTM onboarding sessions — ask leadership to be added</div>
+          <div class="bi"><div class="bd blue"></div>Schedule a separate session for a refresher on PS offerings (ask your EM lead or PS Ops)</div>
+          <div class="bi"><div class="bd blue"></div>Watch <strong>#secret-cx-proserv</strong> for monthly practice updates and new offering announcements</div>
+        </div>
+
+        <div class="sec-head">Pre-sales &amp; scoping</div>
+        <div class="bl" style="margin-bottom:12px;">
+          <div class="bi"><div class="bd blue"></div>Use the forthcoming PS glossary consistently in scoping conversations and SOW reviews — it only works if the team adopts it</div>
+          <div class="bi"><div class="bd blue"></div>During SOW reviews, confirm product fit and validate POC outcomes before sign-off — treat it as a qualification gate, not a formatting check</div>
+          <div class="bi"><div class="bd blue"></div>Qualify customer readiness explicitly: named champion, activation plan, and internal dependencies surfaced before the SOW closes</div>
+          <div class="bi"><div class="bd blue"></div>Always qualify Migration sub-type in SOW language (e.g. "Competitor Migration — Datadog to Grafana Cloud")</div>
+        </div>
+
+        <div class="sec-head">Delivery</div>
+        <div class="bl" style="margin-bottom:12px;">
+          <div class="bi"><div class="bd blue"></div>When flagging low activation intent or a blocking dependency, escalate formally — not just verbally to the AE</div>
+          <div class="bi"><div class="bd blue"></div>Contribute to retrospectives when they launch — future scoping quality depends on real delivery data from you</div>
+        </div>
+
+        <div class="sec-head">Definitions</div>
+        <div class="bl">
+          <div class="bi"><div class="bd blue"></div>Stop using "Onboarding" in customer-facing PS contexts — use Deployment, Setup, or Enablement as appropriate</div>
+          <div class="bi"><div class="bd blue"></div>When asked about "hands-on keyboard" scope, default to: directly configuring, building, or modifying systems — not modifying customer code unless explicitly agreed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn" onclick="goTo(3)">← Prev</button>
+    <div class="nav-dots"><div class="nav-dot" onclick="goTo(0)"></div><div class="nav-dot" onclick="goTo(1)"></div><div class="nav-dot" onclick="goTo(2)"></div><div class="nav-dot" onclick="goTo(3)"></div><div class="nav-dot active" onclick="goTo(4)"></div><div class="nav-dot" onclick="goTo(5)"></div></div>
+    <button class="nav-btn" onclick="goTo(5)">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 6 · METHODOLOGY ══════════════ -->
+<div class="slide" id="s6">
+  <div class="slide-header">
+    <div class="grafana-logo">
+      <span style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--text);">Grafana Labs</span>
+    </div>
+    <div class="slide-meta"><span class="slide-tag">Methodology &amp; Links</span><span class="slide-num">06 / 06</span></div>
+  </div>
+  <div class="slide-body">
+    <div>
+      <div class="slide-title">Survey methodology,<br><span>notes &amp; links</span></div>
+    </div>
+    <div class="two-col">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card">
+          <div class="card-title orange">Question categories</div>
+          <div class="bl">
+            <div class="bi"><div class="bd orange"></div><strong>Current offerings deficits and operational frictions</strong> — evaluating the execution gap: where do processes break down between sales, scoping, and post-sales delivery? Includes project failures, delivery blockers, and confidence ratings.</div>
+            <div class="bi"><div class="bd orange"></div><strong>Definitions and terminology alignment</strong> — probing how different team members define foundational PS concepts. Highlighted semantic gaps that lead to scope creep or delivery friction.</div>
+            <div class="bi"><div class="bd orange"></div><strong>Future offerings requirements</strong> — how to standardize offerings, what to consider, thought process behind it. Includes value definition, pre-sales and post-sales improvements.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title blue">Notes</div>
+          <div class="bl">
+            <div class="bi"><div class="bd blue"></div>Respondents were asked to specify their role at the start of the survey. Roles were used to correlate responses to role distribution where appropriate.</div>
+            <div class="bi"><div class="bd blue"></div>Sample size was ~30% of the PS team (April 2026). 50%+ of respondents were SAs (expected); the rest were EMs and PS Ops team members.</div>
+            <div class="bi"><div class="bd blue"></div>Many questions had multiple-option checkboxes — some percentage totals will exceed 100%.</div>
+            <div class="bi"><div class="bd blue"></div>This survey was designed to establish an internal baseline. A retest is recommended in FY28 to measure progress.</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card">
+          <div class="card-title green">Links</div>
+          <div class="bl">
+            <div class="bi"><div class="bd green"></div><a href="https://docs.google.com/forms/d/1J8EWcPtYDLwc8VBXGVXNrfOAu_qu69KYy9BBz6V-NIc/edit" style="color:var(--blue);" target="_blank">Survey form</a></div>
+            <div class="bi"><div class="bd green"></div><a href="https://docs.google.com/spreadsheets/d/1xhvmLDEPdauIyipCIN9CSt1PLswAT0t2AFJqwiJh0kA/edit?usp=sharing" style="color:var(--blue);" target="_blank">Response sheet — PS Offerings Definition Alignment (Responses)</a></div>
+            <div class="bi"><div class="bd green"></div><a href="https://docs.google.com/presentation/d/1GHKNnn1Ia2ZogpvXLAazqELgq8UvSKHgDkSfzzpTan4/edit?usp=sharing" style="color:var(--blue);" target="_blank">Deck with response slides — Results: PS Offerings Definition Alignment Survey (Google Summaries)</a></div>
+            <div class="bi"><div class="bd green"></div><a href="https://docs.google.com/document/d/19zvhSxL5MNZ4xqJxbk5kaCvQQExRgDLuEXaqeh5_MaU/edit?tab=t.0" style="color:var(--blue);" target="_blank">Detailed analysis document</a></div>
+            <div class="bi"><div class="bd green"></div><a href="https://docs.google.com/spreadsheets/d/10Wg3kAxtdw05GiwirfTdFIxQ87RMD9uIvANFjp7mXTA/edit?gid=0#gid=0" style="color:var(--blue);" target="_blank">Final definitions — Shared Professional Services Definitions</a></div>
+            <div class="bi"><div class="bd gray"></div>HTML deck for distribution: <em>this file</em></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title amber">Survey structure at a glance</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+            <div><strong>Q1–3:</strong> Role, awareness, confusion-causing offerings</div>
+            <div><strong>Q4–14:</strong> Term definitions (Offering, Package, RSA/TSM, SOW, Implementation, Migration, Advisory, Hands-on keyboard, Deployment, Onboarding, Outcome)</div>
+            <div><strong>Q15:</strong> Where definitions break down most</div>
+            <div><strong>Q16–20:</strong> Offering lens, hard-to-deliver examples, worked-well examples</div>
+            <div><strong>Q21–23:</strong> ONE thing every offering must have, standardize immediately, confidence rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nav-btn" onclick="goTo(4)">← Prev</button>
+    <div class="nav-dots"><div class="nav-dot" onclick="goTo(0)"></div><div class="nav-dot" onclick="goTo(1)"></div><div class="nav-dot" onclick="goTo(2)"></div><div class="nav-dot" onclick="goTo(3)"></div><div class="nav-dot" onclick="goTo(4)"></div><div class="nav-dot active" onclick="goTo(5)"></div></div>
+    <button class="nav-btn" onclick="goTo(5)" disabled>Next →</button>
+  </div>
+</div>
+
+</div>
+<script>
+let cur = 0;
+const total = 6;
+function goTo(i) {
+  document.querySelectorAll('.slide').forEach((s,j) => s.classList.toggle('active', j===i));
+  document.querySelectorAll('.nav-dot').forEach((d,j) => d.classList.toggle('active', j===i));
+  cur = i;
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if(b.textContent.includes('Prev')) b.disabled = i===0;
+    if(b.textContent.includes('Next')) b.disabled = i===total-1;
+  });
+}
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight' && cur<total-1) goTo(cur+1);
+  if(e.key==='ArrowLeft' && cur>0) goTo(cur-1);
+});
+</script>
+</body>
+</html>
